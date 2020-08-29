@@ -3,10 +3,13 @@ import createDataContext from "./createDataContext";
 
 const blogActionTypes = {
   ADD: 'ADD_BLOGPOST',
+  DELETE: 'DELETE_BLOGPOST',
 }
 
 const blogReducer = (state, action) => {
   switch(action.type) {
+    case blogActionTypes.DELETE:
+      return state.filter((blogPost) => blogPost.id !== action.payload)
     case blogActionTypes.ADD:
       return [...state,
         {
@@ -25,8 +28,19 @@ const addBlogPost = (dispatch) => {
   }
 }
 
+const deleteBlogPost = (dispatch) => {
+  return (id) => {
+    dispatch(
+      {
+        type: blogActionTypes.DELETE,
+        payload: id
+      }
+    )
+  }
+}
+
 export const { Context, Provider } = createDataContext(
   blogReducer,
-  { addBlogPost },
+  { addBlogPost, deleteBlogPost },
   []
 )
